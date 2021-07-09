@@ -155,3 +155,30 @@ This project is documantation for setup VPS Digital Ocean.
   - input email and answer another questions
   - choose `2 - Redirect - Make all requests redirect to secure HTTPS access`
 - open your domain in browser
+
+# Scheduler
+- run `crontab -e`
+- How to create scheduler for api
+  - i'm create api and run it with curl -> `#0 18 * * * curl 'https://yourdomain.com/api/?site_password=passServer' >/dev/null 2>&1`
+- How to create scheduler for monitor and restart service mysql
+  - create file `/root/monitor-service-mysql.sh`
+    - copy this code
+      ```
+      #!/bin/bash
+
+      # Check if MySQL is running
+      sudo service mysql status > /dev/null 2>&1
+
+      # Restart the MySQL service if it's not running.
+      if [ $? != 0 ]; then
+          sudo service mysql restart
+      fi
+      ```
+  - add this script in crontab `*/1 * * * * /root/monitor-service-mysql.sh > /dev/null 2>&1`
+- save and exit
+
+# Restart Server
+- Restart nginx `service nginx restart`
+- Restart php `service php7.2-fpm restart`
+- Restart mysql `service mysql restart`
+- Restart pm2 service `pm2 restart service_name` -> `pm2 restart web_reactjs`
